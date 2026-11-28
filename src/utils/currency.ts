@@ -50,6 +50,14 @@ export function parseCurrencyInput(input: string): number | null {
   return Math.round(parsed * 100) / 100;
 }
 
+/**
+ * Whether a typed character is accepted by a number input. Commas are allowed because
+ * parseCurrencyInput() reads them as thousands or decimal separators.
+ */
+export function isCurrencyInputChar(char: string): boolean {
+  return /^[0-9.,]$/.test(char);
+}
+
 export function formatCurrency(
   value: number | null,
   options?: {

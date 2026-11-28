@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 import {
   formatBudgetDisplay,
   formatCurrency,
+  isCurrencyInputChar,
   isValidCurrencyInput,
   parseCurrencyInput,
 } from "./currency.ts";
@@ -55,6 +56,27 @@ describe("parseCurrencyInput", () => {
   test("rounds parsed values to 2 decimal places", () => {
     const parsed = parseCurrencyInput("10.129");
     expect(parsed).toBe(Math.round(10.129 * 100) / 100);
+  });
+});
+
+describe("isCurrencyInputChar", () => {
+  test("accepts digits, periods and commas", () => {
+    for (const char of ["0", "9", ".", ","]) {
+      expect(isCurrencyInputChar(char)).toBe(true);
+    }
+  });
+
+  test("rejects other characters", () => {
+    for (const char of ["a", "-", " ", "$"]) {
+      expect(isCurrencyInputChar(char)).toBe(false);
+    }
+  });
+
+  test("keeps typed separators so the value parses as intended", () => {
+    const typed = (keys: string) => [...keys].filter((key) => isCurrencyInputChar(key)).join("");
+    expect(parseCurrencyInput(typed("1000,50"))).toBe(1000.5);
+    expect(parseCurrencyInput(typed("1.000,50"))).toBe(1000.5);
+    expect(parseCurrencyInput(typed("1,000,000"))).toBe(1000000);
   });
 });
 

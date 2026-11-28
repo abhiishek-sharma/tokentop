@@ -3,7 +3,7 @@ import type { ConfigField, PluginType } from "@tokentop/plugin-sdk";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { AppConfig, SparklineOrientation, SparklineStyle } from "@/config/schema.ts";
 import { notificationBus } from "@/plugins/notification-bus.ts";
-import { formatBudgetDisplay, parseCurrencyInput } from "@/utils/currency.ts";
+import { formatBudgetDisplay, isCurrencyInputChar, parseCurrencyInput } from "@/utils/currency.ts";
 import { useConfig } from "../contexts/ConfigContext.tsx";
 import { useDemoMode } from "../contexts/DemoModeContext.tsx";
 import { useInputFocus } from "../contexts/InputContext.tsx";
@@ -526,7 +526,7 @@ export function SettingsModal({ onClose }: SettingsModalProps) {
         setInputValue((prev) => prev.slice(0, -1));
         return;
       }
-      if (key.sequence && /^[0-9.]$/.test(key.sequence)) {
+      if (key.sequence && isCurrencyInputChar(key.sequence)) {
         setInputValue((prev) => prev + key.sequence);
         return;
       }
