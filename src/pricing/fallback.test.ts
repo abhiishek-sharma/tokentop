@@ -44,6 +44,12 @@ describe("getFallbackPricing()", () => {
       output: 4.4,
       source: "fallback",
     });
+    expect(getFallbackPricing("google", "gemini-2.5-flash-lite")).toEqual({
+      input: 0.1,
+      output: 0.4,
+      cacheRead: 0.01,
+      source: "fallback",
+    });
   });
 
   test("returns pricing when a known key includes the model id", () => {
